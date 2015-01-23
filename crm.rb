@@ -30,13 +30,13 @@ class CRM
 	def main_menu
 		while true
 			print_main_menu
-			user_selected = gets.chomp.to_i
-			if (user_selected == 7 || user_selected == 0)
+			user_selected = gets.chomp
+			if (user_selected.to_i == 7 || user_selected == "")
 				puts "Goodbye!"
 				return
 			end
 			# puts "\e[H\e[2J"
-			call_option(user_selected)
+			call_option(user_selected.to_i)
 		end
 	end
 
@@ -92,7 +92,19 @@ class CRM
 	end
 
 	def remove_contact
+		print "Please enter a user ID: "
+		id_input = gets.chomp.to_i
+		puts @rolodex.display_contact(id_input)
 
+		puts "Are you sure you want to remove this contact?"
+		print "(Yes/No): "
+		input = gets.chomp.upcase
+
+		if input != "YES"
+			return
+		else
+			@rolodex.remove_contact(id_input)
+		end
 	end
 
 	def display_contact

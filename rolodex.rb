@@ -18,6 +18,11 @@ class Rolodex
 
 	end
 
+	def remove_contact(id_input)
+		contact_delete = display_contact(id_input)
+		@contacts.delete(contact_delete)
+	end
+
 	def display_contact(id_input)
 		@contacts.find { |contact| contact.id == id_input }
 	end
@@ -35,9 +40,5 @@ class Rolodex
 		else return "Invalid input. Please try again."
 		end
 		sorted_contacts.each { |contact| contact }
-	end
-
-	def delete_contact
-
 	end
 end
