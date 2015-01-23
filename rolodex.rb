@@ -1,7 +1,7 @@
 class Rolodex
 	def initialize
 		@contacts = []
-		@id = 1000
+		@id = 1001
 	end
 
 	def contacts
@@ -18,16 +18,23 @@ class Rolodex
 
 	end
 
-	def display_contact
-
+	def display_contact(id_input)
+		@contacts.find { |contact| contact.id == id_input }
 	end
 
-	def display_all_contacts
-
+	def display_all
+		@contacts.each { |contact| contact }
 	end
 
-	def display_info_by_attribute
-
+	def display_attribute(attribute)
+		case attribute[0].downcase
+		when "f" then sorted_contacts = @contacts.sort_by{ |contact| contact.first_name }
+		when "l" then sorted_contacts = @contacts.sort_by{ |contact| contact.last_name }
+		when "e" then sorted_contacts = @contacts.sort_by{ |contact| contact.email }
+		when "n" then sorted_contacts = @contacts.sort_by{ |contact| contact.note }
+		else return "Invalid input. Please try again."
+		end
+		sorted_contacts.each { |contact| contact }
 	end
 
 	def delete_contact
