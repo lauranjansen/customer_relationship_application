@@ -42,7 +42,7 @@ class Rolodex
 		when "l" then sorted_contacts = @contacts.sort_by{ |contact| contact.last_name }
 		when "e" then sorted_contacts = @contacts.sort_by{ |contact| contact.email }
 		when "n" then sorted_contacts = @contacts.sort_by{ |contact| contact.note }
-		else return "Invalid input. Please try again."
+		else return " Invalid input. Please try again."
 		end
 		sorted_contacts.each { |contact| contact }
 	end

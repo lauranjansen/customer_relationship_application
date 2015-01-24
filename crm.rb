@@ -32,7 +32,7 @@ class CRM
 		while true
 			print_main_menu
 			user_selected = gets.chomp
-			if (user_selected.to_i == 7 || user_selected == "")
+			if (user_selected.to_i == 7 || user_selected == "" || user_selected[0] == "q" || user_selected == "exit" )
 				puts "\n Thanks for using #{@name} CRM!"
 				return
 			end
@@ -57,53 +57,69 @@ class CRM
 		when 5 then display_all
 		when 6 then display_attribute
 		else
-			puts "Invalid option, please enter a number."
+			puts " Invalid option, please enter a number."
 			gets
 		end
 	end
 
 	def add_contact
-		puts "Provide Contact Details"
+		puts " Provide Contact Details (leave a required field blank to cancel)"
+		puts
 
-		print "First Name: "
+		print " First Name (required): "
 		first_name = gets.chomp
+		return if first_name == ""
 
-		print "Last Name: "
+		print " Last Name (required): "
 		last_name = gets.chomp
+		return if first_name == ""
 
-		print "Email: "
+		print " Email (required): "
 		email = gets.chomp
+		return if email == ""
 
-		print "Note: "
+		print " Note (optional): "
 		note = gets.chomp
 
-		puts "Is the above information correct?"
-		print "(Yes/No): "
+		puts " Is the above information correct?"
+		print " (Yes/No): "
 		input = gets.chomp[0].upcase
 
 		if input == "N"
 			return
 		else
 			new_contact = Contact.new(first_name, last_name, email, note)
-			@rolodex.add_contact(new_contact)
+			@rolodex.add_contact(new_contact) 
+
+			puts "\n Contact successfully created.\n "
+			print :" < Press any key to continue >"
+			gets
 		end
 	end
 
 	def modify_contact
-		print "Please enter a user ID: "
+		print :' Please enter a user ID: '
 		id_input = gets.chomp.to_i
-		puts @rolodex.display_contact(id_input)
+		return if id_input == 0
+		puts 
+		contact = @rolodex.display_contact(id_input)
+		if contact == nil
+			print " Invalid contact ID, please try again."
+			gets
+			return
+		end
+		puts contact
+		puts
+		puts " Are you sure you want to modify this contact?"
+		print :" (Yes/No): "
+		input = gets.chomp.upcase
 
-		puts "Are you sure you want to modify this contact?"
-		print "(Yes/No): "
-		input = gets.chomp[0].upcase
-
-		if input != "Y"
+		if input[0] != "Y"
 			return
 		else
-			contact = @rolodex.display_contact(id_input)
-			puts "What do you want to modify?"
-			print "(f)irst name, (l)ast name, (e)mail or (n)ote: "
+			puts
+			puts " What do you want to modify?"
+			print " (f)irst name, (l)ast name, (e)mail or (n)ote: "
 			modify = gets.chomp[0].downcase
 			current_value =
 			case modify
@@ -111,25 +127,34 @@ class CRM
 			when "l" then contact.last_name
 			when "e" then contact.email
 			when "n" then contact.note
-			else puts "Invalid entry, please try again."
+			else
+				print " Invalid entry, please try again."
+				gets
+				return
 			end
-			puts "The current value is: #{current_value}"
-			print "Please enter the desired new value: "
+			puts
+			puts " The current value is: #{current_value}"
+			print " Please enter the desired new value: "
 			new_value = gets.chomp
 
 			@rolodex.modify_contact(contact, modify, new_value)
-
+			puts
+			puts " Attribute modified."
+			puts
+			print :" < Press any key to continue >"
+			gets
 		end
 
 	end
 
 	def remove_contact
-		print "Please enter a user ID: "
+		print :' Please enter a user ID: '
 		id_input = gets.chomp.to_i
+		puts
 		puts @rolodex.display_contact(id_input)
-
-		puts "Are you sure you want to remove this contact?"
-		print "(Yes/No): "
+		puts
+		puts " Are you sure you want to remove this contact?"
+		print :" (Yes/No): "
 		input = gets.chomp.upcase
 
 		if input != "YES"
@@ -140,20 +165,40 @@ class CRM
 	end
 
 	def display_contact
-		print "Please enter a user ID: "
+		print :' Please enter a user ID: '
 		id_input = gets.chomp.to_i
-		puts @rolodex.display_contact(id_input)
+		return if id_input <= 0
+		contact = @rolodex.display_contact(id_input)
+		if contact == nil
+			print " Invalid contact ID, please try again."
+			gets
+			return
+		end
+		puts
+		puts contact
+		puts
+		print :" < Press any key to continue >"
+		gets
 	end
 
 	def display_all
 		puts @rolodex.display_all
+		puts
+		print :" < Press any key to continue >"
 		gets
 	end
 
 	def display_attribute
-		puts "Select an attribute to display by (e.g. first name, last name, email or note)"
+		puts " Available attributes are first name, last name, email or note."
+		print " Select an attribute to sort by: "
 		attr_input = gets.chomp.to_s
-		puts @rolodex.display_attribute(attr_input)
+		if attr_input != ""
+			puts
+			puts @rolodex.display_attribute(attr_input)
+			puts
+			print :" < Press any key to continue >"
+			gets
+		end
 	end
 end
 

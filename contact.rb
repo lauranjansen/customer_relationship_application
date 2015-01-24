@@ -9,6 +9,6 @@ class Contact
 	end
 
 	def to_s
-		"[#{@id}] #{@first_name} #{@last_name}   <#{@email}>   Note: #{@note}"
+		" [#{@id}] #{@first_name} #{@last_name}   <#{@email}>   Note: #{@note}"
 	end
 end
