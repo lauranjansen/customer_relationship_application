@@ -15,16 +15,17 @@ class CRM
 	end
 
 	def print_main_menu
-		# puts "\e[H\e[2J"
+		puts "\e[H\e[2J"
+		puts " Welcome to the #{@name} Customer Relations Management application!\n "
 
-		puts "[1] Add a new contact"
-		puts "[2] Modify an existing contact"
-		puts "[3] Remove a contact"
-		puts "[4] Display a contact"
-		puts "[5] Display all the contacts"
-		puts "[6] Display an attribute"
-		puts "[7] Quit"
-		print "Select a menu option: "
+		puts " [1] Add a new contact"
+		puts " [2] Modify an existing contact"
+		puts " [3] Remove a contact"
+		puts " [4] Display a contact"
+		puts " [5] Display all the contacts"
+		puts " [6] Display an attribute"
+		puts " [7] Quit"
+		print "\n Select a menu option: "
 	end
 
 	def main_menu
@@ -32,10 +33,10 @@ class CRM
 			print_main_menu
 			user_selected = gets.chomp
 			if (user_selected.to_i == 7 || user_selected == "")
-				puts "Goodbye!"
+				puts "\n Thanks for using #{@name} CRM!"
 				return
 			end
-			# puts "\e[H\e[2J"
+			puts "\e[H\e[2J"
 			call_option(user_selected.to_i)
 		end
 	end
@@ -57,6 +58,7 @@ class CRM
 		when 6 then display_attribute
 		else
 			puts "Invalid option, please enter a number."
+			gets
 		end
 	end
 
@@ -75,19 +77,49 @@ class CRM
 		print "Note: "
 		note = gets.chomp
 
-		# puts "Is the above information correct?"
-		# print "(Yes/No): "
-		# input = gets.chomp[0].upcase
+		puts "Is the above information correct?"
+		print "(Yes/No): "
+		input = gets.chomp[0].upcase
 
-		# if input == "N"
-		# 	return
-		# else
+		if input == "N"
+			return
+		else
 			new_contact = Contact.new(first_name, last_name, email, note)
 			@rolodex.add_contact(new_contact)
-		# end
+		end
 	end
 
 	def modify_contact
+		print "Please enter a user ID: "
+		id_input = gets.chomp.to_i
+		puts @rolodex.display_contact(id_input)
+
+		puts "Are you sure you want to modify this contact?"
+		print "(Yes/No): "
+		input = gets.chomp[0].upcase
+
+		if input != "Y"
+			return
+		else
+			contact = @rolodex.display_contact(id_input)
+			puts "What do you want to modify?"
+			print "(f)irst name, (l)ast name, (e)mail or (n)ote: "
+			modify = gets.chomp[0].downcase
+			current_value =
+			case modify
+			when "f" then contact.first_name
+			when "l" then contact.last_name
+			when "e" then contact.email
+			when "n" then contact.note
+			else puts "Invalid entry, please try again."
+			end
+			puts "The current value is: #{current_value}"
+			print "Please enter the desired new value: "
+			new_value = gets.chomp
+
+			@rolodex.modify_contact(contact, modify, new_value)
+
+		end
 
 	end
 
@@ -115,6 +147,7 @@ class CRM
 
 	def display_all
 		puts @rolodex.display_all
+		gets
 	end
 
 	def display_attribute
@@ -124,5 +157,5 @@ class CRM
 	end
 end
 
-bitmaker = CRM.new("Bitmaker CRM")
+bitmaker = CRM.new("Bitmaker")
 bitmaker.main_menu

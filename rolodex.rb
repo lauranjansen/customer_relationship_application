@@ -14,8 +14,13 @@ class Rolodex
 		@id += 1
 	end
 
-	def modify_contact
-
+	def modify_contact(contact, attribute, new_value)
+		case attribute
+		when "f" then contact.first_name = new_value
+		when "l" then contact.last_name = new_value
+		when "e" then contact.email = new_value
+		when "n" then contact.note = new_value
+		end
 	end
 
 	def remove_contact(id_input)
